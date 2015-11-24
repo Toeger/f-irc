@@ -1,3 +1,8 @@
+***Note***
+This is not the official repository. Go to https://www.vanheusden.com/f-irc/ instead.
+
+
+
 compiling
 ---------
 You need to have installed the libraries libncursesw5-dev and libssl-dev.
