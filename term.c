@@ -118,28 +118,34 @@ void mydoupdate()
 
 WINDOW * mynewwin(int nlines, int ncols, int begin_y, int begin_x)
 {
-        WINDOW *dummy = newwin(nlines, ncols, begin_y, begin_x);
-        if (!dummy)
-                error_exit(TRUE, "failed to create window (subwin) with dimensions %d-%d at offset %d,%d (terminal size: %d,%d)\n", ncols, nlines, begin_x, begin_y, max_x, max_y);
-
+		WINDOW *dummy = newwin(nlines, ncols, begin_y, begin_x);
+		if (!dummy){
+			//error_exit(TRUE, "failed to create window (subwin) with dimensions %d-%d at offset %d,%d (terminal size: %d,%d)\n", ncols, nlines, begin_x, begin_y, max_x, max_y);
+			printf("failed to create window (subwin) with dimensions %d-%d at offset %d,%d (terminal size: %d,%d)\n", ncols, nlines, begin_x, begin_y, max_x, max_y);
+			return NULL;
+		}
 	keypad(dummy, TRUE);
 
-        return dummy;
+		return dummy;
 }
 
 NEWWIN * create_window(int n_lines, int n_colls)
 {
-        return create_window_xy((max_y/2) - (n_lines/2), (max_x/2) - (n_colls/2), n_lines, n_colls);
+		return create_window_xy((max_y/2) - (n_lines/2), (max_x/2) - (n_colls/2), n_lines, n_colls);
 }
 
 NEWWIN * create_window_xy(int y_offset, int x_offset, int n_lines, int n_colls)
 {
-        NEWWIN *newwin = malloc(sizeof(NEWWIN));
+		NEWWIN *newwin = malloc(sizeof(NEWWIN));
 
-        /* create new window */
-        newwin -> win = mynewwin(n_lines, n_colls, y_offset, x_offset);
+		/* create new window */
+		newwin -> win = mynewwin(n_lines, n_colls, y_offset, x_offset);
+		if (!newwin -> win){
+			free(newwin);
+			return NULL;
+		}
 	newwin -> pwin = new_panel(newwin -> win);
-        werase(newwin -> win);
+		werase(newwin -> win);
 
 	newwin -> ncols = n_colls;
 	newwin -> nlines = n_lines;
@@ -147,18 +153,18 @@ NEWWIN * create_window_xy(int y_offset, int x_offset, int n_lines, int n_colls)
 	newwin -> x = x_offset;
 	newwin -> y = y_offset;
 
-        return newwin;
+		return newwin;
 }
 
 void limit_print(NEWWIN *win, int width, int y, int x, const char *format, ...)
 {
-        va_list ap;
+		va_list ap;
 	int len = 0;
 	char *buf = NULL;
 
-        va_start(ap, format);
+		va_start(ap, format);
 	len = vasprintf(&buf, format, ap);
-        va_end(ap);
+		va_end(ap);
 
 	if (len > width)
 		buf[width] = 0x00;
@@ -280,18 +286,26 @@ void determine_terminal_size(void)
 	}
 }
 
-void create_win_border(int width, int height, const char *title, NEWWIN **bwin, NEWWIN **win, BOOL f1)
+BOOL create_win_border(int width, int height, const char *title, NEWWIN **bwin, NEWWIN **win, BOOL f1)
 {
 	const char f1_for_help [] = " F1 for help ";
 	int x = max_x / 2 - (width + 2) / 2;
 	int y = max_y / 2 - (height + 2) / 2;
 
-        *bwin = create_window_xy(y + 0, x + 0, height + 2, width + 2);
-        *win  = create_window_xy(y + 1, x + 1, height + 0, width + 0);
+		*bwin = create_window_xy(y + 0, x + 0, height + 2, width + 2);
+		*win  = create_window_xy(y + 1, x + 1, height + 0, width + 0);
 
-        mywattron((*bwin) -> win, A_REVERSE);
-        box((*bwin) -> win, 0, 0);
-        mywattroff((*bwin) -> win, A_REVERSE);
+		if (!*bwin)
+			return FALSE;
+		if (!win){
+			free(*bwin);
+			*bwin = NULL;
+			return FALSE;
+		}
+
+		mywattron((*bwin) -> win, A_REVERSE);
+		box((*bwin) -> win, 0, 0);
+		mywattroff((*bwin) -> win, A_REVERSE);
 
 	mywattron((*bwin) -> win, A_STANDOUT);
 
@@ -311,6 +325,7 @@ void create_win_border(int width, int height, const char *title, NEWWIN **bwin, 
 	}
 
 	mywattroff((*bwin) -> win, A_STANDOUT);
+	return TRUE;
 }
 
 void init_colors(void)
@@ -333,26 +348,26 @@ void apply_mouse_setting(void)
 
 void init_ncurses(BOOL ignore_mouse)
 {
-        initscr();
+		initscr();
 	start_color(); /* don't care if this one failes */
 	use_default_colors();
-        keypad(stdscr, TRUE);
-        cbreak();
-        intrflush(stdscr, FALSE);
-        noecho();
-        nonl();
-        refresh();
-        nodelay(stdscr, FALSE);
-        meta(stdscr, TRUE);     /* enable 8-bit input */
-        raw();  /* to be able to catch ctrl+c */
+		keypad(stdscr, TRUE);
+		cbreak();
+		intrflush(stdscr, FALSE);
+		noecho();
+		nonl();
+		refresh();
+		nodelay(stdscr, FALSE);
+		meta(stdscr, TRUE);     /* enable 8-bit input */
+		raw();  /* to be able to catch ctrl+c */
 	mywattron(stdscr, COLOR_PAIR(default_colorpair));
 
 	apply_mouse_setting();
 
 	init_colors();
 
-        max_y = LINES;
-        max_x = COLS;
+		max_y = LINES;
+		max_x = COLS;
 }
 
 void mywattron(WINDOW *w, int a)
@@ -397,7 +412,7 @@ void display_markerline(NEWWIN *win, const char *msg)
 		waddch(win -> win, '\n');
 
 	color_on(win, markerline_colorpair);
-        mywattron(win -> win, A_REVERSE);
+		mywattron(win -> win, A_REVERSE);
 
 	memset(line, '-', win -> ncols);
 
@@ -409,7 +424,7 @@ void display_markerline(NEWWIN *win, const char *msg)
 
 	waddstr(win -> win, line);
 
-        mywattroff(win -> win, A_REVERSE);
+		mywattroff(win -> win, A_REVERSE);
 
 	free(line);
 	free(msg_use);

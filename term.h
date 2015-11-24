@@ -37,7 +37,7 @@ void limit_print(NEWWIN *win, int width, int y, int x, const char *format, ...);
 void escape_print_xy(NEWWIN *win, int y, int x, const char *str);
 void escape_print(NEWWIN *win, const char *str, const char reverse, const char underline);
 void determine_terminal_size(void);
-void create_win_border(int width, int height, const char *title, NEWWIN **bwin, NEWWIN **win, BOOL f1);
+BOOL create_win_border(int width, int height, const char *title, NEWWIN **bwin, NEWWIN **win, BOOL f1);
 void initcol(void);
 void apply_mouse_setting(void);
 void init_ncurses(BOOL ignore_mouse);

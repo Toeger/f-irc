@@ -163,13 +163,13 @@ void update_input_buffer()
 	reposition_editline_cursor();
 }
 
-void edit_line_keypress(c)
+void edit_line_keypress(int c)
 {
 	if (c == KEY_LEFT)
 	{
 		if (ul_x > 0)
 		{
-			ul_x--;                        
+			ul_x--;
 		}
 		else if (ul_str_pos > 0)
 		{
@@ -733,8 +733,8 @@ int main(int argc, char *argv[])
 
 	init_wc();
 
-	signal(SIGPIPE, SIG_IGN);
-	signal(SIGCHLD, SIG_IGN);
+	//signal(SIGPIPE, SIG_IGN);
+	//signal(SIGCHLD, SIG_IGN);
 
 	if (theme.start_in_channellist_window)
 		set_cursor_mode(CM_CHANNELS);
@@ -743,7 +743,7 @@ int main(int argc, char *argv[])
 
 	create_windows();
 
-        /* initialise mailcheckstuff */
+		/* initialise mailcheckstuff */
 	init_check_mail();
 
 	change_channel(0, 0, TRUE, TRUE);
@@ -1238,14 +1238,14 @@ int main(int argc, char *argv[])
 		if (channel_cursor + channel_offset != prev_channel_pos || names_cursor + names_offset != prev_names_pos || force_channel_win_redraw)
 			show_channel_names_list();
 
-                if (ul_str_pos != ul_prev_str_pos || editline_redraw)
+				if (ul_str_pos != ul_prev_str_pos || editline_redraw)
 		{
 			draw_editline();
 
 			editline_redraw = FALSE;
 		}
 
-                mydoupdate();
+				mydoupdate();
 	}
 
 	exit_fi();

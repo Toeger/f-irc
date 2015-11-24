@@ -60,7 +60,8 @@ void main_help(void)
 	NEWWIN *bwin = NULL, *win = NULL;
 	int screen_nr = 0;
 
-	create_win_border(help_win_width, help_win_height, "left cursor key: previous screen / exit help, right key: next screen", &bwin, &win, FALSE);
+	if (!create_win_border(help_win_width, help_win_height, "left cursor key: previous screen / exit help, right key: next screen", &bwin, &win, FALSE))
+		return;
 
 	for(;;)
 	{

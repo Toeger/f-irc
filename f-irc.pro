@@ -9,7 +9,6 @@ LIBS += -lncursesw
 LIBS += -pthread
 LIBS += -lm
 LIBS += -rdynamic
-#DEFINES += SYSCONFDIR=
 
 TEMPLATE = app
 
