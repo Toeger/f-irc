@@ -122,6 +122,7 @@ WINDOW * mynewwin(int nlines, int ncols, int begin_y, int begin_x)
 		if (!dummy){
 			//error_exit(TRUE, "failed to create window (subwin) with dimensions %d-%d at offset %d,%d (terminal size: %d,%d)\n", ncols, nlines, begin_x, begin_y, max_x, max_y);
 			printf("failed to create window (subwin) with dimensions %d-%d at offset %d,%d (terminal size: %d,%d)\n", ncols, nlines, begin_x, begin_y, max_x, max_y);
+			puts("Press F5 to redraw the screen.");
 			return NULL;
 		}
 	keypad(dummy, TRUE);
