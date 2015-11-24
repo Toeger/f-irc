@@ -6,7 +6,7 @@ VERSION=1.36
 DESTDIR=/usr/local
 SYSCONFDIR=/etc
 
-DEBUG=-O3 -g
+DEBUG=-g
 LDFLAGS+=-lpanelw -lncursesw -pthread -lm -rdynamic
 CFLAGS+=-DVERSION=\"$(VERSION)\" -DSYSCONFDIR=\"$(DESTDIR)$(SYSCONFDIR)\" $(DEBUG) -Wall -pedantic
 
