@@ -1,9 +1,15 @@
-QT += core
+QT -= core
 QT -= gui
 
 TARGET = f-irc
 CONFIG += console
 CONFIG -= app_bundle
+LIBS += -lpanelw
+LIBS += -lncursesw
+LIBS += -pthread
+LIBS += -lm
+LIBS += -rdynamic
+#DEFINES += SYSCONFDIR=
 
 TEMPLATE = app
 

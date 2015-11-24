@@ -7,6 +7,14 @@
 #include "channels.h"
 #include "grep_filter.h"
 
+#ifndef SYSCONFDIR
+#define SYSCONFDIR "."
+#endif
+
+#ifndef VERSION
+#define VERSION "1.36 Toeger"
+#endif
+
 typedef enum { CNF_BOOL, CNF_VALUE, CNF_STRING, CNF_COLOR } cnf_entry_t;
 
 typedef struct
