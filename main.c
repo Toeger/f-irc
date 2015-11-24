@@ -646,7 +646,7 @@ int main(int argc, char *argv[])
 	theme.channellist_window_width = 15;
 	theme.channellist_border = TRUE;
 	theme.chat_window_border = TRUE;
-	theme.show_clock = TRUE;
+	theme.show_clock = FALSE;
 	theme.show_time = TRUE;
 	theme.start_in_channellist_window = TRUE;
 	theme.channellist_newlines_markchar = '*';
